@@ -68,6 +68,7 @@ L.Control.SwitchScaleControl = L.Control.extend({
 
     onDropdownShow: function () {
         this._customScaleInput.value = this.options.ratioCustomItemText;
+
     },
 
     _addScales: function (options, className, container) {
@@ -79,6 +80,9 @@ L.Control.SwitchScaleControl = L.Control.extend({
 
             if (options.ratioMenu) {
                 var dropMenu = L.DomUtil.create('div', 'menu', this._rScaleMenu);
+
+                dropMenu.setAttribute('style', 'background:#ffffff; height:100px; overflow-y:auto; border-radius:5px; opacity:0.7;');
+
                 scales.forEach(function (scaleRatio) {
                     var menuitem = L.DomUtil.create('div', className + '-ratiomenu-item item', dropMenu);
                     menuitem.scaleRatio = scaleRatio;
@@ -117,7 +121,9 @@ L.Control.SwitchScaleControl = L.Control.extend({
                 this._customScaleInput = customScaleInput;
                 var _this = this;
 
+                var focused = false;
                 customScaleInput.addEventListener('focus', function (e) {
+
                     if (this.value === options.ratioCustomItemText) {
                         this.value = options.ratioPrefix;
                     }
@@ -125,8 +131,8 @@ L.Control.SwitchScaleControl = L.Control.extend({
                 });
 
                 customScaleInput.addEventListener('keydown', function (e) {
+
                     if (e.which === 13) {
-                        _this._rScaleMenu.style.display = 'none';
                         var scaleRatioFound = this.value.replace(' ', '').replace('\'', '').match(/^(1:){0,1}([0-9]*)$/);
                         if (scaleRatioFound && scaleRatioFound[2]) {
                             var maxScale = Math.max.apply(null, scales);
@@ -145,12 +151,15 @@ L.Control.SwitchScaleControl = L.Control.extend({
                 });
 
                 customScaleInput.addEventListener('keypress', function (e) {
+
                     if (e.charCode && (e.charCode < 48 || e.charCode > 57)) {
+                        var focused = false
                         return false;
                     }
                 });
 
                 this._rScaleMenu.addEventListener('click', function (e) {
+
                     var target = e.target;
                     if (target.classList.contains(className + '-ratiomenu-item')) {
                         if (target.scaleRatio) {
@@ -164,10 +173,12 @@ L.Control.SwitchScaleControl = L.Control.extend({
                         }
                     }
                 });
-
-                this._rScaleMenu.style.overflow = 'visible';
+                _this._rScaleMenu.style.overflow == 'hidden'
 
                 this._rScaleMenu.addEventListener('click', function () {
+
+                    _this._rScaleMenu.style.overflow = _this._rScaleMenu.style.overflow == 'hidden' ? 'visible' : 'hidden'
+
                     _this.onDropdownShow.call(_this);
                 });
             }
