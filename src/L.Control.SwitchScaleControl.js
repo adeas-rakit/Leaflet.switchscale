@@ -13,7 +13,7 @@ L.Control.SwitchScaleControl = L.Control.extend({
         recalcOnZoomChange: false,
         scales: [500, 1000, 2000, 5000, 10000, 25000, 50000, 100000, 200000, 500000, 1000000, 2500000, 5000000, 10000000],
         roundScales: undefined,
-        adjustScales: false,
+        adjustScales: true,
         pixelsInMeterWidth: function () {
             var div = document.createElement('div');
             div.style.cssText = 'position: absolute; left: -100%; top: -100%; width: 100cm;';
@@ -74,14 +74,14 @@ L.Control.SwitchScaleControl = L.Control.extend({
     _addScales: function (options, className, container) {
         if (options.ratio) {
             this._rScaleMenu = L.DomUtil.create('div', className + '-ratiomenu ui dropdown', container);
-
+            this._rScaleMenu.style.overflow = 'hidden'
             var scales = options.scales;
             this._rScaleMenuText = L.DomUtil.create('text', '', this._rScaleMenu);
 
             if (options.ratioMenu) {
                 var dropMenu = L.DomUtil.create('div', 'menu', this._rScaleMenu);
 
-                dropMenu.setAttribute('style', 'background:#ffffff; height:100px; overflow-y:auto; border-radius:5px; opacity:0.7;');
+                dropMenu.setAttribute('style', 'background:#ffffff;height:100px;overflow-y:auto;border-radius: 0 0 10px 10px;opacity:0.7;padding: 5px;width: 110px;overflow-x: hidden;border: 2px solid #666;border-top: 0;');
 
                 scales.forEach(function (scaleRatio) {
                     var menuitem = L.DomUtil.create('div', className + '-ratiomenu-item item', dropMenu);
@@ -153,34 +153,32 @@ L.Control.SwitchScaleControl = L.Control.extend({
                 customScaleInput.addEventListener('keypress', function (e) {
 
                     if (e.charCode && (e.charCode < 48 || e.charCode > 57)) {
-                        var focused = false
+
                         return false;
                     }
                 });
 
                 this._rScaleMenu.addEventListener('click', function (e) {
 
+                    _this._rScaleMenu.style.overflow = 'visible'
                     var target = e.target;
                     if (target.classList.contains(className + '-ratiomenu-item')) {
                         if (target.scaleRatio) {
+
+                            _this._rScaleMenu.style.overflow = 'hidden'
                             _this._fixedScale = target.scaleRatio;
                             setScaleRatio.call(_this, target.scaleRatio);
                             if (target.classList.contains('custom-scale')) {
                                 target.scaleRatio = undefined;
                             }
+
+                            _this.onDropdownShow.call(_this);
                         } else {
                             e.stopPropagation();
                         }
                     }
                 });
-                _this._rScaleMenu.style.overflow == 'hidden'
 
-                this._rScaleMenu.addEventListener('click', function () {
-
-                    _this._rScaleMenu.style.overflow = _this._rScaleMenu.style.overflow == 'hidden' ? 'visible' : 'hidden'
-
-                    _this.onDropdownShow.call(_this);
-                });
             }
         }
     },
