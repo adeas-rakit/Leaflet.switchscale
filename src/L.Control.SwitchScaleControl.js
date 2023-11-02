@@ -80,8 +80,29 @@ L.Control.SwitchScaleControl = L.Control.extend({
 
             if (options.ratioMenu) {
                 var dropMenu = L.DomUtil.create('div', 'menu', this._rScaleMenu);
+                if (options.position == 'bottomright' || options.position == 'topright') {
+                    if (options.dropdownDirection == 'up') {
+                        dropMenu.setAttribute('style', 'background:#ffffff;height:100px;overflow-y:auto;opacity:0.7;padding: 5px;width: 110px;overflow-x: hidden;border: 2px solid #666;position: absolute;bottom: 20px;right: 0px;');
 
-                dropMenu.setAttribute('style', 'background:#ffffff;height:100px;overflow-y:auto;border-radius: 0 0 10px 10px;opacity:0.7;padding: 5px;width: 110px;overflow-x: hidden;border: 2px solid #666;border-top: 0;');
+                    } else if (options.dropdownDirection == 'bottom') {
+                        dropMenu.setAttribute('style', 'background:#ffffff;height:100px;overflow-y:auto;opacity:0.7;padding: 5px;width: 110px;overflow-x: hidden;border: 2px solid #666;position: absolute;top: 20px;right: 0px;');
+                    } else {
+                        dropMenu.setAttribute('style', 'background:#ffffff;height:100px;overflow-y:auto;opacity:0.7;padding: 5px;width: 110px;overflow-x: hidden;border: 2px solid #666;position: absolute;bottom: 20px;right: 0px;');
+
+                    }
+                }
+                if (options.position == 'bottomleft' || options.position == 'topleft') {
+                    if (options.dropdownDirection == 'up') {
+                        dropMenu.setAttribute('style', 'background:#ffffff;height:100px;overflow-y:auto;opacity:0.7;padding: 5px;width: 110px;overflow-x: hidden;border: 2px solid #666;position: absolute;bottom: 20px;left: 0px;');
+
+                    } else if (options.dropdownDirection == 'bottom') {
+                        dropMenu.setAttribute('style', 'background:#ffffff;height:100px;overflow-y:auto;opacity:0.7;padding: 5px;width: 110px;overflow-x: hidden;border: 2px solid #666;position: absolute;top: 20px;left: 0px;');
+                    } else {
+                        dropMenu.setAttribute('style', 'background:#ffffff;height:100px;overflow-y:auto;opacity:0.7;padding: 5px;width: 110px;overflow-x: hidden;border: 2px solid #666;position: absolute;bottom: 20px;left: 0px;');
+
+                    }
+                }
+                dropMenu.style.position = 'initial'
 
                 scales.forEach(function (scaleRatio) {
                     var menuitem = L.DomUtil.create('div', className + '-ratiomenu-item item', dropMenu);
@@ -161,11 +182,13 @@ L.Control.SwitchScaleControl = L.Control.extend({
                 this._rScaleMenu.addEventListener('click', function (e) {
 
                     _this._rScaleMenu.style.overflow = 'visible'
+                    dropMenu.style.position = 'absolute'
                     var target = e.target;
                     if (target.classList.contains(className + '-ratiomenu-item')) {
                         if (target.scaleRatio) {
 
                             _this._rScaleMenu.style.overflow = 'hidden'
+                            dropMenu.style.position = 'initial'
                             _this._fixedScale = target.scaleRatio;
                             setScaleRatio.call(_this, target.scaleRatio);
                             if (target.classList.contains('custom-scale')) {
